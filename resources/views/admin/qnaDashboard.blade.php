@@ -28,7 +28,7 @@
             <a href="#" class="ansButton" data-id="{{ $question->id }}" data-toggle="modal" data-target="#showAnsModel">See Answers</a>
         </td>
         <td>
-        <button class="btn btn-info editButton" data-id="{{ $question->id }}" data-toggle="modal" data-target="#editQnaModel">Edit</button>
+        <button class="btn btn-info editButton" data-question="{{ $question->question }}" data-id="{{ $question->id }}" data-toggle="modal" data-target="#editQnaModel">Edit</button>
         </td> 
         <td>
             <button class="btn btn-danger deleteButton" data-id="{{ $question->id }}" data-toggle="modal" data-target="#deleteQnaModel">Delete</button>
@@ -265,7 +265,7 @@
     console.log(questions);
     for (let i = 0; i < questions.length; i++) {
         if (questions[i]['id'] == qid) {
-            var answerslength = questions[i]['answers'].length; // corrected line
+            var answerslength = questions[i]['answers'].length; 
             for (let j = 0; j < answerslength; j++) {
                 let is_correct = (questions[i]['answers'][j]['is_correct'] == 1) ? "Yes" : "No";
                 html += `
@@ -339,32 +339,40 @@
     
 
 $("#editQna").submit(function(e) {
-    e.preventDefault();
- if ($(".editAnswers").length < 2) {
+    e.preventDefault(); // Prevent the form from submitting normally
+
+    // Check if there are at least two answer options
+    if ($(".editAnswers").length < 2) {
         $(".editError").text("please add minimum two answers");
         setTimeout(function() {
             $(".editError").text("");
         }, 2000);
     } else {
         var checkIsCorrect = false;
+
+        // Loop through each answer option to check if it is marked as correct
         for (let i = 0; i < $(".edit_is_correct").length; i++) {
             if ($(".edit_is_correct:eq("+i+")").prop("checked")) {
                 checkIsCorrect = true;
                 $(".edit_is_correct:eq("+i+")").val($(".edit_is_correct:eq("+i+")").next().find("input").val());
             }
         }
+
+        // If a correct answer is selected
         if (checkIsCorrect) {
             var formData=$(this).serialize();
+
+            // Make an AJAX request to update the question and answers
             $.ajax({
                 url:"{{ route('updateQna') }}",
                 type:"POST",
                 data:formData,
                 success:function(data){
                     if(data.success== true){
-                        location.reload();
+                        location.reload(); // Reload the page after successful update
                     }
                     else{
-                        alert(data.msg);
+                        alert(data.msg); // Display an error message if the update fails
                     }
                 }
             });
@@ -375,9 +383,7 @@ $("#editQna").submit(function(e) {
             }, 2000);
         }
     }
-}); 
-        
-
+});
     
             //remove answers
             $(document).on('click','.removeAnswers' ,function(){

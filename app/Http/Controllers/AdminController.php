@@ -63,13 +63,15 @@ class AdminController extends Controller
     }
     protected function examDashboard(){
         
+    
+        
         $subjects=Subject::all();
         $exams=Exam::with('subjects')->get();
         return view("admin.Exam-dashboard",['subjects'=>$subjects ,'exams'=> $exams]);
     }
     public function addExam(Request $request){
         try{
-            //$enterance_id = uniqid('exid');
+            $unique_id = uniqid('exid');
            
             
             Exam::insert([
@@ -92,35 +94,31 @@ class AdminController extends Controller
 
     } 
     //edit exam
-    public function getExamDetail($id){
-        try{
-           $exam=Exam::where('id',$id)->get();
-               return response()->json(['success'=>true, "data"=>'$exam']);
-           }
-   
-           catch(\Execption $e){
-               return response()->json(['success'=>false, 'msg'=>$e->getMessage()]);
-           };
-   
-
-    } 
-    public function updateExam(Request $request){
-        try{
-            $exam=Exam::find($request->exam_id);
-            $exam->exam_name=$request->exam_name;
-            $exam->subject_id=$request->subject_id;
-            $exam->date=$request->date;
-            $exam->time=$request->time;
-            $exam->attempt=$request->attempt;
-            
-            $exam->save();
-                return response()->json(['success'=>true, 'msg'=>'exam is updated successfully!']);
-            }
+    public function getExamDetail($id)
+    {
+        try {
+            $exam = Exam::where('id', $id)->get();
+            return response()->json(['success' => true, "data" => $exam]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+        }
+    }
     
-            catch(\Execption $e){
-                return response()->json(['success'=>false, 'msg'=>$e->getMessage()]);
-            };
-
+    public function updateExam(Request $request)
+    {
+        try {
+            $exam = Exam::find($request->exam_id);
+            $exam->exam_name = $request->exam_name;
+            $exam->subject_id = $request->subject_id;
+            $exam->date = $request->date;
+            $exam->time = $request->time;
+            $exam->attempt = $request->attempt;
+    
+            $exam->save();
+            return response()->json(['success' => true, 'msg' => 'Exam is updated successfully!']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+        }
     }
     //delete exam
     public function deleteExam(Request $request){
@@ -174,48 +172,46 @@ class AdminController extends Controller
         return response()->json(['success'=>true ,'msg'=>'answer is deleted succcessfully']);
     }
     public function updateQna(Request $request) {
-        try{
-            Question::where('id',$request->question_id)->update([
-                'question'=>$request->question
+        try {
+            Question::where('id', $request->question_id)->update([
+                'question' => $request->question
             ]);
-            //old answer update
-            if(isset($request->answers)){
-                $is_correct=0;
-                if($request->is_correct == $value){
-                    $is_correct=1;
+    
+            // Old answer update
+            if (isset($request->answers)) {
+                foreach ($request->answers as $key => $value) {
+                    $is_correct = 0;
+                    if ($request->is_correct == $key) {
+                        $is_correct = 1;
+                    }
+                    Answer::where('id', $key)
+                        ->update([
+                            'question_id' => $request->question_id,
+                            'answer' => $value,
+                            'is_correct' => $is_correct,
+                        ]);
                 }
-                foreach($request->answers as $key->$value){
-                    Answer::where('id',$key)
-                    ->update([
-                        'question_id'=>$request->question_id,
-                        'answer'=>$value,
-                        'is_correct'=> $is_correct,
+            }
+    
+            // New answer is added
+            if (isset($request->new_answers)) {
+                foreach ($request->new_answers as $answer) {
+                    $is_correct = 0;
+                    if ($request->is_correct == $answer) {
+                        $is_correct = 1;
+                    }
+                    Answer::insert([
+                        'question_id' => $request->question_id,
+                        'answer' => $answer,
+                        'is_correct' => $is_correct,
                     ]);
                 }
             }
-            //new answer is added
-            if(isset($request->new_answers)){
-               
-                foreach($request->new_answers as $answer){
-                    $is_correct=0;
-                    if($request->is_correct == $answer){
-                        $is_correct=1;
-                    }
-                Answer::insert([
-                    'question_id'=>$request->question_id,
-                    'answer'=>$answer,
-                    'is_correct'=> $is_correct,
-
-                ]);
-                }
-            }
-            return response()->json(['success'=>true, 'msg'=>'Q&A updated successfully']);
-
-        }catch(\Execption $e){
-            return response()->json(['success'=>false, 'msg'=>$e->getMessage()]);
-        };
-
-        
+    
+            return response()->json(['success' => true, 'msg' => 'Q&A updated successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+        }
     }
     public function deleteQna(Request $request){
         Question::where('id',$request->id)->delete();
@@ -244,12 +240,12 @@ class AdminController extends Controller
      }
  
      
-      //add subject
+      //add student
      
       public function addStudent(Request $request)
       {
           try {
-              $password = Str::random(8);
+              $password = Str::random();
       
               User::insert([
                   'name' => $request->name,
@@ -275,7 +271,7 @@ class AdminController extends Controller
           }
       }
  
-     //edit subject
+     //edit student
      public function editStudent(Request $request){
          try{
  

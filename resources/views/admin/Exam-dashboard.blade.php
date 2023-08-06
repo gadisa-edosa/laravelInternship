@@ -16,6 +16,7 @@ Add Exam
             <th>Time</th>
             <th>attempt</th>
             <th>Edit</th>
+            <th>Delete</th>
         </tr>
     </thead>
     <tbody>
@@ -25,7 +26,7 @@ Add Exam
             <tr>
                 <td>{{ $exam->id }}</td>
                 <td>{{ $exam->exam_name }}</td>
-                <td>{{ $exam->subjects[0]['subject '] }}</td>
+                <td>{{ $exam->subject }}</td>
                 <td>{{ $exam->date }}</td>
                 <td>{{ $exam->time }}Hrs</td>
                 <td>{{ $exam->attempt }}Time</td>
@@ -149,7 +150,7 @@ Add Exam
     </div>
   </div>
     <!-- delete Exam Modal -->
-    <div class="modal fade" id="deleteExamModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="deleteExamModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
   
    
@@ -177,87 +178,74 @@ Add Exam
       </div>
     </div>
   <script>
-        $(document).ready(function(){
-            $("#addExam").submit(function(e){
-            e.preventDefault();
-            var formData=$(this).serialize();
-            $.ajax({
-                url:"{{ route('addExam') }}",
-                type:"POST",
-                data:formData,
-                success:function(data){
-                  if(data.success==true){
-                        location.reload();
-                    }else{
-                        alert(data.msg);
-                    }                   
-                }
+        $(document).ready(function() {
+  $("#addExam").submit(function(e) {
+    e.preventDefault();
+    var formData = $(this).serialize();
+    $.ajax({
+      url: "{{ route('addExam') }}",
+      type: "POST",
+      data: formData,
+      success: function(data) {
+        if (data.success == true) {
+          location.reload();
+        } else {
+          alert(data.msg);
+        }
+      }
+    });
+  });
 
-            });
-           // Handle AJAX request for editing an exam
-$(".editButton").click(function(){
-    var id=$(this).attr('data-id');
+  // Handle AJAX request for editing an exam
+  $(document).ready(function() {
+  // Handle AJAX request for editing an exam
+  $(".editButton").click(function() {
+    var id = $(this).attr('data-id');
     $("#exam_id").val(id);
     var url = $(this).attr('data-url');
-   
-    url = url.replace('id',id);
-    $.ajax({
-        url:url,
-        type:"GET",
-        success:function(data){
-            if(data.success ==true){
-                var exam = data.data;
-                $("#exam_name").val(exam[0].exam_name);
-                $("#subject_id").val(exam[0].subject_id);
-                $("#date").val(exam[0].date);
-                $("#time").val(exam[0].time);
-            }else{
-                alert(data.msg);
-            }
-        }
-    });
-});
 
-// Handle AJAX request for updating an exam
-$("#editExam").submit(function(e){
-    e.preventDefault();
-    var formData=$(this).serialize();
+    url = url.replace('id', id);
     $.ajax({
-        url:"{{ route('updateExam') }}",
-        type:"POST",
-        data:formData,
-        success:function(data){
-            if(data.success==true){
-                location.reload();
-            }else{
-                alert(data.msg);
-            }                   
+      url: url,
+      type: "GET",
+      success: function(data) {
+        if (data.success == true) {
+          var exam = data.data;
+          $("#exam_name").val(exam[0].exam_name);
+          $("#subject_id").val(exam[0].subject_id);
+          $("#date").val(exam[0].date);
+          $("#time").val(exam[0].time);
+          $("#attempt").val(exam[0].attempt); // Add this line to include the attempt value
+        } else {
+          alert(data.msg);
         }
+      }
     });
-});
+  });
 
-// Handle AJAX request for deleting an exam
-$(".deleteButton").click(function(){
-    var id=$(this).attr('data-id');
-    $("#deleteExamId").val(id);
+  // Rest of the code...
 });
-$("#deleteExam").submit(function(e){
+  // Handle AJAX request for deleting an exam
+  $(".deleteButton").click(function() {
+    // ...
+  });
+
+  $("#deleteExam").submit(function(e) {
     e.preventDefault();
-    var formData=$(this).serialize();
+    var formData = $(this).serialize();
     $.ajax({
-        url:"{{ route('deleteExam') }}",
-        type:"POST",
-        data:formData,
-        success:function(data){
-            if(data.success==true){
-                location.reload();
-            }else{
-                alert(data.msg);
-            }                   
+      url: "{{ route('deleteExam') }}",
+      type: "POST",
+      data: formData,
+      success: function(data) {
+        if (data.success == true) {
+          location.reload();
+        } else {
+          alert(data.msg);
         }
+      }
     });
+  }); // Add this closing brace
 });
-            });
-          });
              </script>
              @endsection

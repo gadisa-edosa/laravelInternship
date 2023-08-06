@@ -1,4 +1,4 @@
-@extends('layout/admin-layout')
+@extends('layout/student-layout')
 @section('space-work')
 <h2 class="mb-4">Students</h2><!-- Button trigger modal -->
 

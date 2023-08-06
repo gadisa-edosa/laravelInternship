@@ -20,6 +20,13 @@ use Illuminate\Support\Carbon;
 
 class AuthController extends Controller
 {
+    public function index(){
+        Session::put('activeNav','home');
+        $data = [
+            'title'=> 'Home page',
+            'users' => User::with(['roles'])->get(),
+        ];
+    }
     public function loadRegister(){
         if(Auth::user() && Auth::user()->is_admin==1){
             return redirect('/admin/dashboard');
