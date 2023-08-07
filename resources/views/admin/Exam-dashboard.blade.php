@@ -119,7 +119,7 @@ Add Exam
                 @csrf
               <div class="modal-body">
                   <label >Exam</label>
-                  <input type="text" name="exam_name" id="exam_name" placeholder="Enter Exam name" class="w-100" id="edit_exam" required><br><br>
+                  <input type="text" name="exam_name" id="exam_name" placeholder="Enter Exam name" class="w-100" id="edit_exam" required><br><br>s
                   <input type="hidden" name="exam_id" id="exam_id">
                   <select name="subject_id" id="subject_id" required class="w-100">
                     <option value="">Select Subject</option>
@@ -152,8 +152,6 @@ Add Exam
     <!-- delete Exam Modal -->
     <div class="modal fade" id="deleteExamModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
-  
-   
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLongTitle">Delete Exam</h5>
@@ -161,24 +159,22 @@ Add Exam
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <form id="deleteExam">
-                  @csrf
-                <div class="modal-body">
-                    <label >Exam</label>
-                    <input type="hidden" name="exam_id" id="deleteExamId">
-                    <p>are sure you want to Delete the Exam?</p>
-                    
-                </div>    
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-danger">delete</button>
-                </div>
-               </div>
-      </form>
+          <form id="deleteExamForm">
+            <div class="modal-body">
+              <label>Exam</label>
+              <input type="hidden" name="exam_id" id="deleteExamId">
+              <p>Are you sure you want to delete the Exam?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   <script>
-        $(document).ready(function() {
+    $(document).ready(function() {
   $("#addExam").submit(function(e) {
     e.preventDefault();
     var formData = $(this).serialize();
@@ -187,7 +183,7 @@ Add Exam
       type: "POST",
       data: formData,
       success: function(data) {
-        if (data.success == true) {
+        if (data.success) {
           location.reload();
         } else {
           alert(data.msg);
@@ -197,25 +193,22 @@ Add Exam
   });
 
   // Handle AJAX request for editing an exam
-  $(document).ready(function() {
-  // Handle AJAX request for editing an exam
   $(".editButton").click(function() {
-    var id = $(this).attr('data-id');
-    $("#exam_id").val(id);
-    var url = $(this).attr('data-url');
+    var id = $(this).data('id');
+    var url = $(this).data('url').replace('id', id);
 
-    url = url.replace('id', id);
     $.ajax({
       url: url,
       type: "GET",
       success: function(data) {
-        if (data.success == true) {
+        if (data.success) {
           var exam = data.data;
-          $("#exam_name").val(exam[0].exam_name);
-          $("#subject_id").val(exam[0].subject_id);
-          $("#date").val(exam[0].date);
-          $("#time").val(exam[0].time);
-          $("#attempt").val(exam[0].attempt); // Add this line to include the attempt value
+          $("#exam_id").val(exam.exam_id);
+          $("#exam_name").val(exam.exam_name);
+          $("#subject_id").val(exam.subject_id);
+          $("#date").val(exam.date);
+          $("#time").val(exam.time);
+          $("#attempt").val(exam.attempt);
         } else {
           alert(data.msg);
         }
