@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Schema;
 class CreateExamsTable extends Migration
 {
     public function up()
+
+
+    
     {
         Schema::create('exams', function (Blueprint $table) {
             $table->id();
