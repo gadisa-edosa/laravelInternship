@@ -4,17 +4,69 @@
 <div style="color: black" class="container">
     <p style="color: black;">Welcome, {{ Auth::user()->name }}</p>
     <h3 class="text-center">{{ $exam[0]['exam_name'] }}</h3>
+    @php $qcount = 1; @endphp
     @if ($success == true)
     @if (count($qna)>0)
-    @foreach ($qna as $data)
-       <h5>Q.{{ $data['question'][0]['question'] }}</h5>
-        
-    @endforeach
+       <form action="" method="POST" class="mb-5"  onsubmit="return isValid()">
+        <input type="hidden" name="exam_id" value="{{ $exam[0]['id'] }}">
+            @php $qcount = 1; @endphp
+            @foreach ($qna as $data)
+            <div>
+            <h5>Q{{$qcount++}}.  {{ $data['question'][0]['question'] }}</h5>
+            <input type="hidden" name="q[]" value="{{ $data['question'][0]['id'] }}">
+            <!-- In your HTML code -->
+            @php
+            $ansCount = $qcount - 1;
+            @endphp
+            <input type="hidden" name="ans_{{ $ansCount }}" id="ans_{{ $ansCount }}">
+            @php $acount = 1; @endphp
+            @foreach ($data['question'][0]['answers'] as $answer)
+                <p><b>{{$acount++}}).<b>   {{ $answer['answer'] }}
+                    <input type="radio" name="radio_{{$qcount}}" class="select_ans" data-id="{{$qcount}}" value="{{ $answer->id }}">
+                    @php $acount++; @endphp
+                </p>
+            @endforeach
+        </div>
+            <br>
+                
+            @endforeach
+            <div class="text-center">
+                <input type="submit" class="btn btn-info">
+            </div>
+    </form>
     @else
        <h3 class="text-center" style="color: red;">Questions and Answers not Availabile</h3>
     @endif
     @else
       <h3 class="text-center" style="color: red;">{{ $msg }}</h3>
     @endif
+    <script>
+       $(document).ready(function() {
+    $('.select_ans').click(function() {
+        var no = $(this).attr('data-id');
+        $('#ans_' + no).val($(this).val());
+    });
+});
+
+function isValid() {
+    var result = true;
+    var qlength = parseInt("{{ $qcount }}") - 1;
+
+    for (let i = 0; i < qlength; i++) {
+        var answer = $('#ans_' + i).val();
+        if (answer === "") {
+            result = false;
+            if ($('#ans_' + i).parent().find('.error_msg').length === 0) {
+                $('#ans_' + i).parent().append('<span style="color:red;" class="error_msg">please select answer.</span>');
+                setTimeout(() => {
+                    $('#ans_' + i).parent().find('.error_msg').remove();
+                }, 5000);
+            }
+        }
+    }
+
+    return result;
+}
+<script>
+      @endsection
    
-@endsection

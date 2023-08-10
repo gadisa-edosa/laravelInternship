@@ -5,7 +5,7 @@
     <p>Welcome, {{ Auth::user()->name }}</p>
     <h1 class="text-center">{{ $exam[0]->exam_name }}</h1>
     @php $qcount = 1; @endphp
-    
+    @if ($success == true)
     @if (count($qna) > 0)
     <form action="" method="POST" class="mb-5" onsubmit="isValid()">
         <input type="hidden" name="exam_id" value="{{ $exam[0]->id }}">
@@ -32,7 +32,7 @@
     <h3 class="text-center" style="color: red;">Questions & Answers not available</h3>
     @endif
     @else
-    
+    <h3 class="text-center" style="color: red;">{{ $msg }}</h3>
     @endif
   </div>
 <script>
