@@ -21,11 +21,12 @@
 	          <span class="sr-only">Toggle Menu</span>
 	        </button>
         </div>
-	  		<h1><a href="/admin/dashboard" class="logo">Hii,Student</a></h1>
+	  		<h1><a href="/admin/dashboard" class="logo">Student Dashboard</a></h1>
         <ul class="list-unstyled components mb-5">
           <li class="active">
             <a href="/dashboard"><span class="fa fa-book mr-3"></span> Dashboard</a>
           </li>
+         
           
           <li>
               <a href="/logout"><span class="fa fa-sign-out mr-3"></span> logout</a>

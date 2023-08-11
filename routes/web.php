@@ -75,8 +75,16 @@ Route::group(['middleware' => ['web', 'checkAdmin']],function () {
        Route::post('/add-questions' ,[AdminController::class,'addQuestions'])->name('addQuestions');
        Route::get('/get-exam-questions' ,[AdminController::class,'getExamQuestions'])->name('getExamQuestions');
        Route::delete('/delete-exam-questions' ,[AdminController::class,'deleteExamQuestions'])->name('deleteExamQuestions');
-   
+       //exam marks route
+         Route::get('/admin/marks' ,[AdminController::class,'loadMarks']);
+         Route::post('/update-marks' ,[AdminController::class,'updateMarks'])->name('updateMarks');
+
+         //exam review
+         Route::get('/admin/review-exams' ,[AdminController::class,'reviewExams'])->name('reviewExams');
+
     });
+   
+    
 
 Route::group(['middleware' => ['web', 'checkStudent']],function () {
     Route::get('/dashboard', [AuthController::class,'loadDashboard']);
