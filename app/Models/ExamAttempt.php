@@ -12,7 +12,7 @@ class ExamAttempt extends Model
 
     protected $fillable = [
         'exam_id',
-        'user_id',
+        'user_id'
     ];
 
     public function user()

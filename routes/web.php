@@ -75,7 +75,7 @@ Route::group(['middleware' => ['web', 'checkAdmin']],function () {
        Route::post('/add-questions' ,[AdminController::class,'addQuestions'])->name('addQuestions');
        Route::get('/get-exam-questions' ,[AdminController::class,'getExamQuestions'])->name('getExamQuestions');
        Route::delete('/delete-exam-questions' ,[AdminController::class,'deleteExamQuestions'])->name('deleteExamQuestions');
-       Route::get('/exam-submit',[ExamController::class,'examSubmit'])->name('examSubmit');
+      
     
        //exam marks route
          Route::get('/admin/marks' ,[AdminController::class,'loadMarks']);
@@ -83,13 +83,10 @@ Route::group(['middleware' => ['web', 'checkAdmin']],function () {
 
          //exam review
          Route::get('/admin/review-exams' ,[AdminController::class,'reviewExams'])->name('reviewExams');
+        });
+    Route::group(['middleware' => ['web', 'checkStudent']],function () {
+         Route::get('/dashboard', [AuthController::class,'loadDashboard']);
+         Route::get('/exam/{id}', [ExamController::class,'loadExamDashboard']);
 
-    });
-   
-    
-
-Route::group(['middleware' => ['web', 'checkStudent']],function () {
-    Route::get('/dashboard', [AuthController::class,'loadDashboard']);
-    Route::get('/exam/{id}', [ExamController::class,'loadExamDashboard']);
-   
-});
+         Route::post('/exam-submit', [ExamController::class, 'examSubmit'])->name('examSubmit');
+   });

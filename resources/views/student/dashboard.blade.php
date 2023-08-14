@@ -11,7 +11,7 @@
             <th>Time</th>
             <th>Total attempt</th>
             <th>Available attempt</th>
-            <th>Copy Link</th>
+            <th>Select Exam</th>
         </tr>
     </thead>
     <tbody>
@@ -28,8 +28,8 @@
                     <td>{{ $exam->time }} Hrs</td>
                     <td>{{ $exam->attempt }} Time</td>
                     <td>{{ $exam->attempt_counter }}</td>
-                    <td></td>
-                    <td><a href="#" data-code="{{ $exam->enterance_id }}" class="copy"><i class="fa fa-copy"></i></a></td>
+                    
+                    <td><button class="btn btn-info">open exam</button></td>
                 </tr>
             @endforeach
         @else
