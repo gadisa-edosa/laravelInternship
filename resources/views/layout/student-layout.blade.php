@@ -26,6 +26,10 @@
           <li class="active">
             <a href="/dashboard"><span class="fa fa-book mr-3"></span> Dashboard</a>
           </li>
+          <li class="active">
+            <a href="{{ route('resultDashboard') }}"><span class="fa fa-list-alt mr-3"></span> Results</a>
+          </li>
+         
          
           
           <li>

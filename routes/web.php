@@ -49,8 +49,8 @@ Route::group(['middleware' => ['web', 'checkAdmin']],function () {
     Route::get('/admin/exam' ,[AdminController::class,'examDashboard']);
     
     Route::post('/add-exam' ,[AdminController::class,'addExam'])->name('addExam');
-    Route::get('/get-exam-detail/{id}' ,[AdminController::class,'getExamDetail'])->name('getExamDetail');
-    Route::post('/edit-exam' ,[AdminController::class,'editExam'])->name('editExam');
+    Route::get('/get-exam-detail/{id}', 'AdminController@getExamDetail')->name('getExamDetail');
+    Route::post('/edit-exam', 'AdminController@editExam')->name('editExam');
     Route::post('/delete-exam' ,[AdminController::class,'deleteExam'])->name('deleteExam');
    
     Route::get('/admin/qna-ans' ,[AdminController::class,'qnaDashboard']);
@@ -80,13 +80,23 @@ Route::group(['middleware' => ['web', 'checkAdmin']],function () {
        //exam marks route
          Route::get('/admin/marks' ,[AdminController::class,'loadMarks']);
          Route::post('/update-marks' ,[AdminController::class,'updateMarks'])->name('updateMarks');
+         
 
          //exam review
          Route::get('/admin/review-exams' ,[AdminController::class,'reviewExams'])->name('reviewExams');
-        });
+         
+         Route::get('/get-reviewed-qna' ,[AdminController::class,'reviewQna'])->name('reviewQna');
+         Route::post('/approved-qna' ,[AdminController::class,'approvedQna'])->name('approvedQna');
+
+    });
+        
     Route::group(['middleware' => ['web', 'checkStudent']],function () {
          Route::get('/dashboard', [AuthController::class,'loadDashboard']);
          Route::get('/exam/{id}', [ExamController::class,'loadExamDashboard']);
 
          Route::post('/exam-submit', [ExamController::class, 'examSubmit'])->name('examSubmit');
+         Route::get('/results', [ExamController::class, 'resultDashboard'])->name('resultDashboard');
+         Route::get('/review-student-qna', [ExamController::class, 'reviewQna'])->name('reviewStudentQna');
+     
+
    });

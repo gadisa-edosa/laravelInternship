@@ -6,15 +6,16 @@
 
   <table class="table">
     <thead>
-        <tr>
+        
             <th>#</th>
             <th>Exam_Name</th>
             <th>Marks/Q</th>
             <th>Total marks</th>
+            <th>passing marks</th>
             <th>Edit</th>
-            <th>Delete</th>
+           
 
-        </tr>
+        
     </thead>
     <tbody>
 
@@ -28,8 +29,9 @@
                     <td>{{ $exam->exam_name }}</td>
                     <td>{{ $exam->marks }}</td>
                     <td>{{ count($exam->getQnaExam) * $exam->marks }}</td>
+                    <td>{{ $exam->pass_marks }}</td>
                     <td>
-                        <button class="btn btn-primary editMarks" data-id="{{ $exam->id }} data-marks="{{ $exam->marks }} data-totalq="{{ count($exam->getQnaExam) }}" data-toggle="modal" data-target="#editMarksModal">Edit</button>
+                        <button class="btn btn-primary editMarks" data-id="{{ $exam->id }}" data-marks="{{ $exam->marks }}" data-pass-marks="{{ $exam->pass_marks }}" data-totalq="{{ count($exam->getQnaExam) }}" data-toggle="modal" data-target="#editMarksModal">Edit</button>
                     </td>
                 </tr>
             @endforeach
@@ -41,8 +43,7 @@
 
     </tbody>
 
-</table>
-
+</table> 
 
   <!-- Edit Marks Modal -->
   <div class="modal fade" id="editMarksModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -60,8 +61,8 @@
                 @csrf
               <div class="modal-body">
 
-                <div class="row">
-                    <div class="col-sm-3">
+                <div class="row ">
+                    <div class="col-sm-4">
                         <label>Marks/Q</label>
                     </div>
                     <div class="col-sm-6">
@@ -72,16 +73,27 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-sm-3">
+                <div class="row mt-2">
+                    <div class="col-sm-4">
                         <label>Total Marks</label>
                     </div>
                     <div class="col-sm-6">
                         <input type="text" disabled placeholder="Enter Total Marks" id="tmarks">
                     </div>
                 </div>
+                 
+                <div class="row mt-2">
+                    <div class="col-sm-4">
+                        <label>passing Marks</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" 
+                        onkeypress="return event.charCode >=48 && event.charCode <=57 || event.charCode == 46"
+                        name="pass_marks" placeholder="Enter passing marks" id="pass_marks" required>
+                    </div>
+                </div>
 
-              </div>
+              
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary">Update Marks</button>
@@ -103,18 +115,48 @@ $(document).ready(function() {
                 $('#exam_id').val(exam_id);
                 $('#tmarks').val((marks*totalq).toFixed(1));
                 totalQna = totalq;
+                $('#pass_marks').val($(this).attr('data-pass-marks'));
             });
+            $('#marks').keyup(function(){
+                $('#tmarks').val( ($(this).val()*totalQna).toFixed(1));
+            });
+            $('#pass_marks').keyup(function(){
+                $('.pass-error').remove();
+                var tmarks = $('#tmarks').val();
+                var pmarks = $(this).val();
+                if(parseFloat(pmarks) >= parseFloat(tmarks)){
+                    $(this).parent().append('<p style="color:red;" mt-1 class="pass-error">passing marks will be less than totals marks!</p>')
+                    setTimeout(() => {
+                        $('.pass-error').remove();
+                        
+                    }, 2000);
+                }
+
+            });
+            
             $('#marks').keyup(function(){
                 $('#tmarks').val( ($(this).val()*totalQna).toFixed(1) );
             });
             $("#editMarks").submit(function(event){
                 event.preventDefault();
+                $('.pass-error').remove();
+                var tmarks = $('#tmarks').val();
+                var pmarks = $('#pass_marks').val();
+                if(parseFloat(pmarks) >= parseFloat(tmarks)){
+                    $('#pass_marks').parent().append('<p style="color:red;" mt-1 class="pass-error">passing marks will be less than totals marks!</p>')
+                    setTimeout(() => {
+                        $('.pass-error').remove();
+                        
+                    }, 2000);
+                    return false;
+                }
                 var formData=$(this).serialize();
                 $.ajax({
                     url:"{{ route('updateMarks') }}",
                     type:"POST",
                     data:formData,
                     success:function(data){
+                        
                         if(data.success==true){
                             location.reload();
                         }else{
@@ -123,11 +165,10 @@ $(document).ready(function() {
                     }
                 });
             });
-  });
+        });
+            
+  
 </script>
 
 
 @endsection
-           
-           
-        
