@@ -444,7 +444,6 @@ class AdminController extends Controller
         public function reviewQna(Request $request)
         {
             try {
-
                 
 
 
