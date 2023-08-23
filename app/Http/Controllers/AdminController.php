@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Subject;
 use App\Models\ExamAttempt;
 use App\Models\Exam;
+use App\Exports\ExportStudent;
 use App\Models\ExamAnswer;
 use App\Models\Question;
 use App\Models\Answer;
@@ -148,8 +149,14 @@ class AdminController extends Controller
     public function addQna(Request $request){
         
         try{
+            $explanation = null;
+            if(isset($request->explanation)){
+                $explanation = $request->explanation;
+            }
+
             $questionId=Question::insertGetId([
-                'question' => $request->question
+                'question' => $request->question,
+                'explanation'=>$explanation
             ]);
            
            foreach($request->answers as $answer){
@@ -181,8 +188,14 @@ class AdminController extends Controller
     }
     public function updateQna(Request $request) {
         try {
+            $explanation = null;
+            if(isset($request->explanation)){
+                $explanation = $request->explanation;
+            }
+
             Question::where('id', $request->question_id)->update([
-                'question' => $request->question
+                'question' => $request->question,
+                'explanation'=>$explanation
             ]);
     
             // Old answer update
@@ -320,6 +333,11 @@ class AdminController extends Controller
          };
      }
     
+     public function exportStudents()
+     {
+        return Excel::download(new ExportStudent, 'students.xlsx');
+     }
+
      //get questions
      public function getQuestions(Request $request){
         try{

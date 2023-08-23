@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\MailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +20,7 @@ use App\Http\Controllers\ExamController;
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::get('send-mail',[MailController::class,'index']);
 Route::get('/register',[AuthController::class, 'loadRegister']);
 Route::post('/register',[AuthController::class, 'studentRegister'])->name('studentRegister');
 
@@ -49,8 +50,8 @@ Route::group(['middleware' => ['web', 'checkAdmin']],function () {
     Route::get('/admin/exam' ,[AdminController::class,'examDashboard']);
     
     Route::post('/add-exam' ,[AdminController::class,'addExam'])->name('addExam');
-    Route::get('/get-exam-detail/{id}', 'AdminController@getExamDetail')->name('getExamDetail');
-    Route::post('/edit-exam', 'AdminController@editExam')->name('editExam');
+    Route::get('/get-exam-detail/{id}',[AdminController::class,'getExamDetail'])->name('getExamDetail');
+    Route::post('/edit-exam' ,[AdminController::class,'editExam'])->name('editExam');
     Route::post('/delete-exam' ,[AdminController::class,'deleteExam'])->name('deleteExam');
    
     Route::get('/admin/qna-ans' ,[AdminController::class,'qnaDashboard']);
@@ -70,6 +71,7 @@ Route::group(['middleware' => ['web', 'checkAdmin']],function () {
     Route::post('/edit-student' ,[AdminController::class,'editStudent'])->name('editStudent');
     Route::post('/delete-student' ,[AdminController::class,'deleteStudent'])->name('deleteStudent');
 
+    Route::get('/export-students',[AdminController::class,'exportStudents'])->name('exportStudents');
        //exams routing
        Route::get('/get-questions' ,[AdminController::class,'getQuestions'])->name('getQuestions');
        Route::post('/add-questions' ,[AdminController::class,'addQuestions'])->name('addQuestions');

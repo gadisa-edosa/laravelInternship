@@ -117,8 +117,3 @@ class ExamController extends Controller
 
         }
     }
-
-
-    
-       
-       

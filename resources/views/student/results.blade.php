@@ -77,6 +77,33 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="explanationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Explantion</h5>
+    
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+    
+                  <div class="modal-body ">
+                      <p id="explanation"></p>
+    
+                      </div>
+    
+                  <div class="modal-footer">
+                      <span class="editError" style="color: red;"></span>
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      
     <script>
        $(document).ready(function() {
   $('.reviewExam').click(function() {
@@ -87,20 +114,24 @@
       data: { attempt_id: id },
       success: function(data) {
         var html = '';
-        if (data && data.success === true) {
+        if (data.success == true) {
           var responseData = data.data;
-          if (responseData && responseData.length > 0) {
+          if (responseData.length > 0){
             for (let i = 0; i < responseData.length; i++) {
               let isCorrect = '<span style="color:red;" class="fa fa-close"></span>';
               let answer = responseData[i]['answers']['answer'];
-              if (responseData[i]['answers']['is_correct'] === 1) {
+              if (responseData[i]['answers']['is_correct'] == 1) {
                 isCorrect = '<span style="color:green;" class="fa fa-check"></span>';
               }
               html += '<div class="row">' +
                 '<div class="col-sm-12">' +
                 '<h6>Q(' + (i + 1) + '). ' + responseData[i]['question']['question'].replace(/'/g, "\\'") + '</h6>' +
-                '<p>Ans: ' + answer + '  ' + isCorrect + '</p>' +
-                '</div>' +
+                '<p>Ans: ' + answer + '  ' + isCorrect + '</p>';
+              if (responseData[i]['question']['explanation'] != null) {
+                html += '<p><a href="#" data-explanation="' + responseData[i]['question']['explanation'] + '" class="explanation" data-toggle="modal" data-target="#explanationModal">Explanation</a></p>';
+              }
+              html += '</div>' +
+
                 '</div>';
             }
           } else {
@@ -117,7 +148,14 @@
       }
     });
   });
+
+  $(document).on('click', '.explanation', function() {
+    var explanation = $(this).attr('data-explanation');
+    $('#explanation').text(explanation);
+  });
+  
 });
     
+
     </script>
 @endsection

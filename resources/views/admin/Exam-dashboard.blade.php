@@ -28,7 +28,7 @@ Add Quiz
             <tr>
                 <td>{{ $exam->id }}</td>
                 <td>{{ $exam->exam_name }}</td>
-                <td>{{ $exam->subjects}}</td>
+                <td>{{ $exam->subjects[0]['subject']}}</td>
                 <td>{{ $exam->date }}</td>
                 <td>{{ $exam->time }}Hrs</td>
                 <td>{{ $exam->attempt }}Time</td>
@@ -142,11 +142,10 @@ Add Quiz
                   <br><br>
                   <input type="date" name="date" id="date" class="w-100"  requireds min="@php
                       echo date('Y-m-d');
-                  @endphp"
-                      
-                  ><br><br>
-                  <input type="time" name="time" id="time" class="w-100"  requireds 
-       <br><br>
+                  @endphp">
+                  <br><br>
+                  <input type="time" name="time" id="time" class="w-100"  requireds >
+                  <br><br>
                   <input type="number" name="attempt" min="1" id="attempt" placeholder="Enter attempt Exam Time" class="w-100"  requireds >
 
               </div>    

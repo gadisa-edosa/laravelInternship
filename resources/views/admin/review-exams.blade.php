@@ -19,8 +19,7 @@
             @foreach ($attempts as $attempt)
                 <tr>
                     <td>{{ $x++ }}</td>
-                    <td>{{ $attempt->user->name }}</td>
-                    <td>{{ $attempt->exam->exam_name }}</td>
+                      <td>{{ $attempt->exam->exam_name }}</td>
                     <td>
                         @if ($attempt->status == 0)
                             <span style="color: red">Pending</span>
