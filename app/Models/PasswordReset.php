@@ -14,9 +14,9 @@ use Illuminate\Support\Carbon;
 class PasswordReset extends Model
 {
     use HasFactory;
-    public $table="password_resets";
-    public $timestamps=false;
-    protected $primaryKey='email';
+    public $table = "password_resets";
+    public $timestamps = false;
+    protected $primaryKey = 'email';
 
     protected $fillable = [
         'email',

@@ -28,7 +28,8 @@
                         <td>{{ $exam->attempt }} Time</td>
                         <td>{{ $exam->attempt_counter }}</td>
                         <td>
-                            <button class="open-exam btn btn-primary" data-code="{{ $exam->enterance_id }}"> Open Exam</button>
+                            <button class="open-exam btn btn-primary" data-code="{{ $exam->enterance_id }}"> Open
+                                Exam</button>
                         </td>
                     </tr>
                 @endforeach

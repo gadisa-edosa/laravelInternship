@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>{{ $data['title'] }}</title>
 </head>
+
 <body>
-    
+
     <table>
         <tr>
             <th>Name</th>
@@ -20,4 +22,5 @@
     <a href="{{ $data['url'] }}"> Click here to login</a>
     <p>Thank you</p>
 </body>
+
 </html>

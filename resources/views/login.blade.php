@@ -1,29 +1,52 @@
 @extends('layout/layout-common')
+@section('content')
+    {{-- message --}}
+    <div class="login-right">
+        <div class="login-right-wrap">
+            <h1>Welcome to Dashbord</h1>
+            <p class="account-subtitle">Need an account? <a href="{{ route('studentRegister') }}">Sign Up</a></p>
+            <h2>Sign in</h2>
 
-@section('space-work')
+            <form action="{{ route('userLogin') }}" method="POST">
+                @csrf
 
-<h1>Login</h1>
-@if ($errors->any())
-    @foreach ($errors->all() as $error)
-        <p style="color: red">{{ $error }}</p>
-    @endforeach
-@endif
+                <div class="form-group">
+                    <label>Email<span class="login-danger">*</span></label>
+                    <input type="email" class="form-control @error('email') is-invalid @enderror" name="email">
+                    <span class="profile-views"><i class="fas fa-envelope"></i></span>
+                </div>
+                <div class="form-group">
+                    <label>Password <span class="login-danger">*</span></label>
+                    <input type="password" class="form-control pass-input @error('password') is-invalid @enderror"
+                        name="password">
+                    <span class="profile-views feather-eye toggle-password"></span>
+                </div>
+                <div class="forgotpass">
+                    <div class="remember-me">
+                        <label class="custom_check mr-2 mb-0 d-inline-flex remember-me"> Remember me
+                            <input type="checkbox" name="radio">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <a href="/forgot-password">Forgot Password?</a>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary btn-block" type="submit">Login</button>
+                </div>
+            </form>
 
-<form action="{{ route('userLogin') }}" method="POST">
-@csrf
 
-<input type="email" name="email" placeholder="Enter Email">
-<br><br>
-<input type="password" name="password" placeholder="Enter Password">
-<br><br>
-<input type="submit" value="Login">
-</form>
-<a href="/register">create new account</a>
-<br><br>
-<a href="/forget-password">Forget Password</a>
+            <div class="login-or">
+                <span class="or-line"></span>
+                <span class="span-or">or</span>
+            </div>
 
-@if (Session::has('success'))
-    <p style="color: green">{{Session::get('success')}}</p>
-@endif
-
+            <div class="social-login">
+                <a href="#"><i class="fab fa-google-plus-g"></i></a>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </div>
 @endsection

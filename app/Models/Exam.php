@@ -10,7 +10,7 @@ use App\Models\User;
 class Exam extends Model
 {
     use HasFactory;
-    protected $fillable=[
+    protected $fillable = [
         'exam_name',
         'subject_id',
         'date',
@@ -19,16 +19,18 @@ class Exam extends Model
     ];
     protected $appends = ['attempt_counter'];
     public $count = '';
-   
-    public function subjects(){
-        return $this->hasMany(Subject::class,'id','subject_id');
+
+    public function subjects()
+    {
+        return $this->hasMany(Subject::class, 'id', 'subject_id');
     }
-    public function getQnaExam(){
-        return $this->hasMany(QnaExam::class,'exam_id','id');
+    public function getQnaExam()
+    {
+        return $this->hasMany(QnaExam::class, 'exam_id', 'id');
     }
     public function getIdAttribute($value)
     {
-        $attemptCount = ExamAttempt::where(['exam_id'=>$value,'user_id'=> auth()->user()->id])->count();
+        $attemptCount = ExamAttempt::where(['exam_id' => $value, 'user_id' => auth()->user()->id])->count();
         $this->count = $attemptCount;
         return $value;
     }
@@ -38,4 +40,3 @@ class Exam extends Model
         return $this->count;
     }
 }
-

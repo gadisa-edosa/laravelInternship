@@ -18,23 +18,20 @@ class Result extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class,'id','student_id');
+        return $this->hasOne(User::class, 'id', 'student_id');
     }
 
     public function exam()
     {
-        return $this->hasOne(Exam::class,'id','exam_id');
+        return $this->hasOne(Exam::class, 'id', 'exam_id');
     }
-      public function question()
+    public function question()
     {
-        return $this->hasOne(Question::class,'id','question_id');
+        return $this->hasOne(Question::class, 'id', 'question_id');
     }
 
     public function answers()
     {
-        return $this->hasOne(Answer::class,'id','answer_id');
+        return $this->hasOne(Answer::class, 'id', 'answer_id');
     }
 }
-
- 
-
